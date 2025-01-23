@@ -8,9 +8,76 @@
 	"item": [
 		{
 			"name": "New Request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							" pm.test(\"Status code is 200\", function () {\r",
+							"        pm.response.to.have.status(200);\r",
+							"    });\r",
+							"\r",
+							"\r",
+							"    pm.test(\"Response time is less than 400ms\", function () {\r",
+							"        pm.expect(pm.response.responseTime).to.be.below(400);\r",
+							"    });\r",
+							"\r",
+							"    var schema=\r",
+							"    {\r",
+							"  \"type\": \"object\",\r",
+							"  \"properties\": {\r",
+							"    \"data\": {\r",
+							"      \"type\": \"object\",\r",
+							"      \"properties\": {\r",
+							"        \"id\": {\r",
+							"          \"type\": \"integer\"\r",
+							"        },\r",
+							"        \"email\": {\r",
+							"          \"type\": \"string\",\r",
+							"          \"format\": \"email\"\r",
+							"        },\r",
+							"        \"first_name\": {\r",
+							"          \"type\": \"string\"\r",
+							"        },\r",
+							"        \"last_name\": {\r",
+							"          \"type\": \"string\"\r",
+							"        },\r",
+							"        \"avatar\": {\r",
+							"          \"type\": \"string\",\r",
+							"          \"format\": \"uri\"\r",
+							"        }\r",
+							"      },\r",
+							"      \"required\": [\"id\", \"email\", \"first_name\", \"last_name\", \"avatar\"]\r",
+							"    }\r",
+							"  },\r",
+							"  \"required\": [\"data\"]\r",
+							"}\r",
+							"\r",
+							"pm.test(\"Validate schema json response data format\", () => {\r",
+							"    pm.response.to.have.jsonSchema(schema);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
 			"request": {
 				"method": "GET",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
 					"raw": "{{url_collection}}/api/users/2",
 					"host": [
