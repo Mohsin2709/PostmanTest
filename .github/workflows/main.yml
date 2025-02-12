@@ -3,28 +3,29 @@ name: Run Postman Collection with Newman
 on:
   push:
     branches:
-      - main  # Trigger the action when changes are pushed to the main branch
-  pull_request:
-    branches:
-      - main  # Also trigger on pull requests to main
+      - main  # Trigger the workflow on push to the main branch
 
 jobs:
-  test:
-    runs-on: ubuntu-latest  # Choose the environment to run the action (Ubuntu in this case)
+  run_postman_collection:
+    runs-on: ubuntu-latest  # You can change this to a different OS if needed
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2  # Checks out the repository so the files are accessible
+      # Step 1: Checkout the repository
+      - name: Checkout Repository
+        uses: actions/checkout@v2
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v2  # Installs Node.js, which is required for Newman
-      with:
-        node-version: '14'  # Use Node.js version 14
+      # Step 2: Set up Node.js (install Node.js 16.x or higher)
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'  # You can change this to '16.x' or any higher version
 
-    - name: Install Newman
-      run: |
-        npm install -g newman  # Install Newman globally to run the Postman collection
+      # Step 3: Install dependencies (including Newman)
+      - name: Install Dependencies
+        run: |
+          npm install -g newman  # Install Newman globally
 
-    - name: Run Postman Collection
-      run: |
-        newman run "NewmanAPI/New Collection.postman_collection.json"  # Path to your Postman collection
+      # Step 4: Run the Postman collection using Newman
+      - name: Run Postman Collection
+        run: |
+          newman run "NewmanAPI/New Collection.postman_collection.json"  # Path to your Postman collection
