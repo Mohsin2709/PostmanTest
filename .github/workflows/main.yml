@@ -1,20 +1,30 @@
-name: Example Workflow
+name: Run Postman Collection with Newman
 
 on:
   push:
     branches:
-      - main
+      - main  # Trigger the action when changes are pushed to the main branch
+  pull_request:
+    branches:
+      - main  # Also trigger on pull requests to main
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  test:
+    runs-on: ubuntu-latest  # Choose the environment to run the action (Ubuntu in this case)
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+    - name: Checkout repository
+      uses: actions/checkout@v2  # Checks out the repository so the files are accessible
 
-      - name: Install dependencies
-        run: npm install
+    - name: Set up Node.js
+      uses: actions/setup-node@v2  # Installs Node.js, which is required for Newman
+      with:
+        node-version: '14'  # Use Node.js version 14
 
-      - name: Run tests
-        run: npm test
+    - name: Install Newman
+      run: |
+        npm install -g newman  # Install Newman globally to run the Postman collection
+
+    - name: Run Postman Collection
+      run: |
+        newman run "NewmanAPI/New Collection.postman_collection.json"  # Path to your Postman collection
